@@ -177,20 +177,19 @@ code, pre {
 }
 
 /* ── Expander ────────────────────────────────────────────────── */
-.streamlit-expanderHeader {
-  background: var(--surface) !important;
+[data-testid="stExpander"] {
   border: 1px solid var(--border-subtle) !important;
   border-radius: var(--radius-sm) !important;
-  color: var(--text-secondary) !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  letter-spacing: 0.06em !important;
-  text-transform: uppercase !important;
-}
-.streamlit-expanderContent {
   background: var(--surface) !important;
-  border: 1px solid var(--border-subtle) !important;
-  border-top: none !important;
+}
+[data-testid="stExpander"] summary {
+  color: var(--text-secondary) !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+}
+[data-testid="stExpander"] > div:last-child {
+  background: var(--surface) !important;
+  border-top: 1px solid var(--border-subtle) !important;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
