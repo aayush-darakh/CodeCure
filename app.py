@@ -177,19 +177,23 @@ code, pre {
 }
 
 /* ── Expander ────────────────────────────────────────────────── */
-[data-testid="stExpander"] {
+[data-testid="stExpander"] details {
   border: 1px solid var(--border-subtle) !important;
   border-radius: var(--radius-sm) !important;
   background: var(--surface) !important;
 }
-[data-testid="stExpander"] summary {
-  color: var(--text-secondary) !important;
+[data-testid="stExpander"] details summary {
   font-size: 13px !important;
   font-weight: 600 !important;
+  color: var(--text-secondary) !important;
+  list-style: none !important;
+  padding: 10px 14px !important;
 }
-[data-testid="stExpander"] > div:last-child {
-  background: var(--surface) !important;
-  border-top: 1px solid var(--border-subtle) !important;
+[data-testid="stExpander"] details summary::-webkit-details-marker {
+  display: none !important;
+}
+[data-testid="stExpander"] details summary::marker {
+  display: none !important;
 }
 
 /* ── Buttons ─────────────────────────────────────────────────── */
