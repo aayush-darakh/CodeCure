@@ -22,12 +22,15 @@ import os
 import joblib
 import requests
 
-# ── TensorFlow: graceful import ──────────────────────────────
+# ── TensorFlow: optional — loaded lazily only when needed ────
+TF_AVAILABLE = False
+tf = None
 try:
-    import tensorflow as tf
+    import importlib
+    tf = importlib.import_module("tensorflow")
     TF_AVAILABLE = True
 except Exception:
-    TF_AVAILABLE = False
+    pass
 
 # ══════════════════════════════════════════════════════════════
 # PAGE CONFIG — must be first Streamlit call
@@ -1050,14 +1053,14 @@ def compute_risk_scores(df_owid):
 @st.cache_resource(show_spinner=False)
 def load_lstm_model():
     """Load saved LSTM model, scaler and sequence length from disk."""
+    if not TF_AVAILABLE or tf is None:
+        return None, None, 30
     model_path  = os.path.join(os.path.dirname(__file__), "model1.h5")
     scaler_path = os.path.join(os.path.dirname(__file__), "scaler.pkl")
     seqlen_path = os.path.join(os.path.dirname(__file__), "seq_len.pkl")
-    if not TF_AVAILABLE:
-        return None, None, 30
     try:
-        model  = tf.keras.models.load_model(model_path, compile=False)
-        scaler = joblib.load(scaler_path)
+        model   = tf.keras.models.load_model(model_path, compile=False)
+        scaler  = joblib.load(scaler_path)
         seq_len = int(joblib.load(seqlen_path)) if os.path.exists(seqlen_path) else 30
         return model, scaler, seq_len
     except Exception:
@@ -1236,6 +1239,8 @@ with tab1:
         cdf, smoothed, forecast_vals, forecast_dates = lstm_forecast_real(
             jhu_df, lstm_country, forecast_days
         )
+    if not TF_AVAILABLE:
+        st.info("ℹ️ Running in lightweight mode: forecast uses exponential smoothing (TensorFlow not installed in this environment). Results are indicative only.")
 
     fig_lstm = go.Figure()
     fig_lstm.add_trace(go.Scatter(
